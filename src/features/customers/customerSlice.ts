@@ -1,10 +1,4 @@
-import { Action } from "redux";
-
-const customerInitialState = {
-  fullName: "",
-  nationalID: "",
-  createdAt: "",
-};
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CustomerState {
   fullName: string;
@@ -12,6 +6,54 @@ interface CustomerState {
   createdAt: string;
 }
 
+interface CreateCustomerPayload {
+  fullName: string;
+  nationalID: string;
+  createdAt: string;
+}
+
+interface UpdateNamePayload {
+  fullName: string;
+}
+
+const initialState: CustomerState = {
+  fullName: "",
+  nationalID: "",
+  createdAt: "",
+};
+
+const customerSlice = createSlice({
+  name: "customer",
+  initialState,
+  reducers: {
+    createCustomer: {
+      prepare(fullName: string, nationalID: string) {
+        return {
+          payload: {
+            fullName,
+            nationalID,
+            createdAt: new Date().toISOString(),
+          },
+        };
+      },
+
+      reducer(state, action: PayloadAction<CreateCustomerPayload>) {
+        state.fullName = action.payload.fullName;
+        state.nationalID = action.payload.nationalID;
+        state.createdAt = action.payload.createdAt;
+      },
+    },
+    updateName(state, action: PayloadAction<UpdateNamePayload>) {
+      state.fullName = action.payload.fullName;
+    },
+  },
+});
+
+export const { createCustomer, updateName } = customerSlice.actions;
+
+export default customerSlice.reducer;
+
+/*
 interface CreateCustomerAction extends Action {
   type: "customer/createCustomer";
   payload: {
@@ -30,7 +72,7 @@ interface UpdateNameAction extends Action {
 
 type CustomerActions = CreateCustomerAction | UpdateNameAction;
 
-export default function custumerReducer(
+export default function customerReducer(
   state: CustomerState = customerInitialState,
   action: CustomerActions
 ) {
@@ -65,3 +107,4 @@ export function createCustomer(
 export function updateName(fullName: string): UpdateNameAction {
   return { type: "customer/updateName", payload: { fullName } };
 }
+*/
