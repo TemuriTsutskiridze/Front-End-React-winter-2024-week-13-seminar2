@@ -1,17 +1,15 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import accountReducer from "./features/accounts/accountSlice";
-import custumerReducer from "./features/customers/customerSlice";
-import { thunk } from "redux-thunk";
+import customerReducer from "./features/customers/customerSlice";
 
-const rootReducer = combineReducers({
-  account: accountReducer,
-  customer: custumerReducer,
-});
-
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
-
+const store = configureStore({
+  reducer: {
+    account: accountReducer,
+    customer: customerReducer,
+  },
+});
 export default store;
